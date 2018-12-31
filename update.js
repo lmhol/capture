@@ -306,7 +306,7 @@ setInterval(function() {
   z.shift();
   z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
   z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
-}, 5000);
+}, 10000);
 
 Menu();
 window.oncontextmenu = function (){
