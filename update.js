@@ -63,12 +63,14 @@ function Load(){
         btn.onclick = function(){
           btn.parentNode.removeChild(btn);
           document.body.style.backgroundColor = "#d1ecfd";
+          Update();
           z = [];
           time = 60;
           score = 0;
-          Update();
+          cf = ctx.font = "30px Arial";
         };
     var t = document.createTextNode("Begin Game");
+
     btn.appendChild(t);
     document.body.appendChild(btn);
 }
@@ -208,7 +210,17 @@ function timeAndScore(){
     ctx.fillText("Bullets Shot: " + bShot, 20, 200);
     ctx.fillText("Accuracy: " + Math.floor(zKill/bShot*100) + "%", 20, 240);
     ctx.fillText("Cities Found: " + cFound, 20, 280);
+    ctx.fillText("Play Again", px - 60, py + 40);
+    ctx.fillRect(px - 70, py + 50, 150, 50);
 
+    document.body.addEventListener("click", function (e) {
+      if(e.clientX > (px - 70) && e.clientX < (px + 80) && e.clientY > (py + 50) && e.clientY < (py + 100)){
+        function myFunction(){
+          location.reload();
+        }
+        myFunction();
+      }
+    });
   } else {
     fScore = score;
     ctx.fillText("Time: " + time, 20, 80);
@@ -309,6 +321,7 @@ setInterval(function() {
 }, 10000);
 
 Menu();
+
 window.oncontextmenu = function (){
     return false;
 }
