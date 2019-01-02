@@ -58,7 +58,7 @@ function Bullets(){
 
 function Load(){
 
-    var btn = document.createElement("button");
+  var btn = document.createElement("button");
         btn.style.cssText = "position:absolute; zIndex:2; height:5%; width:10%; top:47.5%; left:45%;";
         btn.onclick = function(){
           btn.parentNode.removeChild(btn);
@@ -71,19 +71,16 @@ function Load(){
         };
     var t = document.createTextNode("Begin Game");
 
+    document.body.style.backgroundColor = "red";
     btn.appendChild(t);
     document.body.appendChild(btn);
-}
 
-function Menu(){
-  document.body.style.backgroundColor = "blue";
-  Load();
 }
 
 function Movement(){
 
-  var speed = 500,
-      friction = .82;
+  var speed = 10,
+      friction = .8;
 
 //keypress movement
   if(key[87] || key[38]) { //up
@@ -210,8 +207,10 @@ function timeAndScore(){
     ctx.fillText("Bullets Shot: " + bShot, 20, 200);
     ctx.fillText("Accuracy: " + Math.floor(zKill/bShot*100) + "%", 20, 240);
     ctx.fillText("Cities Found: " + cFound, 20, 280);
-    ctx.fillText("Play Again", px - 60, py + 40);
-    ctx.fillRect(px - 70, py + 50, 150, 50);
+    ctx.fillStyle = "blue";
+    ctx.fillRect(px - 70, py + 50, 150, 40);
+    ctx.fillStyle = "white";
+    ctx.fillText("Play Again", px - 67, py + 78);
 
     document.body.addEventListener("click", function (e) {
       if(e.clientX > (px - 70) && e.clientX < (px + 80) && e.clientY > (py + 50) && e.clientY < (py + 100)){
@@ -320,7 +319,7 @@ setInterval(function() {
   z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
 }, 10000);
 
-Menu();
+Load();
 
 window.oncontextmenu = function (){
     return false;
