@@ -15,13 +15,14 @@ var c = document.getElementById('c'),
     fScore = 0,
     time = 60,
     fTime = 0,
-    bShot = 0,
+    bShot = 0.00001,
     zKill = 0,
     b = [],
     z = [],
     key = [],
     city = Random(0, 204),
-    cFound = 0;
+    cFound = 0,
+    tSwitch = 1;
 
 function Bullets(){
 
@@ -193,29 +194,47 @@ function timeAndScore(){
   ctx.fillStyle = "black";
   ctx.beginPath();
   if(time < 1 || score < 0) {
+
     var final = Math.floor(fScore + fTime + (zKill*(zKill/bShot*100)) + (cFound*10));
-    clearInterval(tickTock);
-    time = 0;
-    ctx.fillText("Game Over", px - 86, py - 50);
-    if((fTime%60)<10){
-      ctx.fillText("Total Time: " + Math.floor(fTime/60) + ":" + "0" + fTime % 60, 20 , 80);
-    } else {
-      ctx.fillText("Total Time: " + Math.floor(fTime/60) + ":" + fTime % 60, 20 , 80);
+
+    function gameOver(){
+      tSwitch = 0;
+      time = 0;
+      ctx.fillText("Game Over", px - 86, py - 50);
+
+      if((fTime%60)<10){
+        ctx.fillText("Total Time: " + Math.floor(fTime/60) + ":" + "0" + fTime % 60, 20 , 80);
+      } else {
+        ctx.fillText("Total Time: " + Math.floor(fTime/60) + ":" + fTime % 60, 20 , 80);
+      }
+
+      ctx.fillText("Final Score: " + final, 20, 120);
+      ctx.fillText("Zombies Killed: " + zKill, 20, 160);
+      ctx.fillText("Bullets Shot: " + Math.floor(bShot), 20, 200);
+      ctx.fillText("Accuracy: " + Math.floor(zKill/bShot*100) + "%", 20, 240);
+      ctx.fillText("Cities Found: " + cFound, 20, 280);
+      ctx.fillStyle = "blue";
+      ctx.fillRect(px - 70, py + 50, 150, 40);
+      ctx.fillStyle = "white";
+      ctx.fillText("Play Again", px - 67, py + 78);
     }
-    ctx.fillText("Final Score: " + final, 20, 120);
-    ctx.fillText("Zombies Killed: " + zKill, 20, 160);
-    ctx.fillText("Bullets Shot: " + bShot, 20, 200);
-    ctx.fillText("Accuracy: " + Math.floor(zKill/bShot*100) + "%", 20, 240);
-    ctx.fillText("Cities Found: " + cFound, 20, 280);
-    ctx.fillStyle = "blue";
-    ctx.fillRect(px - 70, py + 50, 150, 40);
-    ctx.fillStyle = "white";
-    ctx.fillText("Play Again", px - 67, py + 78);
+
+    gameOver();
 
     document.body.addEventListener("click", function (e) {
       if(e.clientX > (px - 70) && e.clientX < (px + 80) && e.clientY > (py + 50) && e.clientY < (py + 100)){
         function myFunction(){
-          location.reload();
+          score = 0,
+          fScore = 0,
+          time = 60,
+          fTime = 0,
+          bShot = 0.00001,
+          zKill = 0,
+          b = [],
+          z = [],
+          cFound = 0,
+          tSwitch = 1,
+          city = Random(0, 204);
         }
         myFunction();
       }
@@ -309,9 +328,12 @@ function Update() {
 }
 
 var tickTock = setInterval(function() {
-  time--;
-  fTime++;
+  if(tSwitch==1){
+    time--;
+    fTime++;
+  } else{}
 }, 1000);
+
 
 setInterval(function() {
   z.shift();
