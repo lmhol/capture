@@ -222,7 +222,7 @@ function timeAndScore(){
     gameOver();
 
     document.body.addEventListener("click", function (e) {
-      if(e.clientX > (px - 70) && e.clientX < (px + 80) && e.clientY > (py + 50) && e.clientY < (py + 100)){
+      if(tSwitch == 0 && e.clientX > (px - 70) && e.clientX < (px + 80) && e.clientY > (py + 50) && e.clientY < (py + 100)){
         function myFunction(){
           score = 0,
           fScore = 0,
