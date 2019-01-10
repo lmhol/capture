@@ -127,6 +127,19 @@ function Load(){
   ctx.fillStyle = "white";
   ctx.font = "30px Arial"
   ctx.fillText("Play", cw/2-50,ch/2+135);
+
+  //click play button on load screen
+  document.body.addEventListener("click", function (e) {
+    if(lSwitch==1){
+      if(e.clientX > (cw/2-70) && e.clientX < (cw/2+30) && e.clientY > (ch/2+100) && e.clientY < (ch/2+150)){
+        lSwitch = 0;
+        document.body.style.backgroundColor = "#d1ecfd";
+        Update();
+        z = [];
+        time = 60;
+        score = 0;
+      }
+  }});
 }
 
 function Movement(){
@@ -274,28 +287,19 @@ function Update() {
 
 function Zombies(){
 
-  if(z.length < 1){
-     z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
-  }
-
   for (var i=0; i < z.length; i++){
 
     z[i][2] -= vx;
     z[i][3] -= vy;
-    z[i][2] -= (Random(0, z[i][2]) - Random(0, z[i][0])) * .02 + Random(-3,3);
-    z[i][3] -= (Random(0, z[i][3]) - Random(0, z[i][1])) * .02 + Random(-3,3);
+    z[i][2] -= (Random(0, z[i][2]) - Random(0, z[i][0])) * .03 + Random(-3,3);
+    z[i][3] -= (Random(0, z[i][3]) - Random(0, z[i][1])) * .03 + Random(-3,3);
     z[i][4] --;
 
-//jumps to player
-/*   if(z[i][2] < px + 200 && z[i][2] > px - 200 && z[i][3] < py + 200 && z[i][3] > py - 200){
-      z[i][2] -= (z[i][2] - z[i][0]) * .08 + Random(-7,7);
-      z[i][3] -= (z[i][3] - z[i][1]) * .08 + Random(-7,7);
-*/
+//if zombie bites you, you lose points and they die
       if(z[i][2] < px + 10 && z[i][2] > px - 10 && z[i][3] > py - 10 && z[i][3] < py + 10){
         score -= 500;
         z.splice(i, 1);
       }
-//    }
 
     ctx.fillStyle = "green";
     ctx.beginPath();
@@ -341,45 +345,39 @@ var tickTock = setInterval(function() {
 
 //zombie spawner
 setInterval(function() {
-  z.shift();
-  z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
+  z.shift(); //clears oldest one out
   z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
 }, 5000);
 
-//shows initial load screen
+//load screen then loads game
 if(lSwitch == 1){
   Load();
 } else {
   Update();
 }
 
+//stops rightclick
 window.oncontextmenu = function (){
     return false;
-} //stops rightclick
+}
+
+//resize when change to fullscreen
 window.onresize = function (){
   cw = c.width = window.innerWidth;
   ch = c.height = window.innerHeight;
   cf = ctx.font = "30px Arial";
   px = cw/2;
   py = ch/2;
-} //resize when change to fullscreen
-document.body.addEventListener("click", function (e) {
-  if(lSwitch==1){
-    if(e.clientX > (cw/2-70) && e.clientX < (cw/2+30) && e.clientY > (ch/2+100) && e.clientY < (ch/2+150)){
-      lSwitch = 0;
-      document.body.style.backgroundColor = "#d1ecfd";
-      Update();
-      z = [];
-      time = 60;
-      score = 0;
-    }
-  }}); //click play button on load screen
+}
+
+//shoots bullet
 document.body.addEventListener("click", function (e) {
   b.push([px, py, e.clientX, e.clientY, px, py]);
   if(time<=0||score<0){
   } else{bShot++;}
-}); //shoots bullet
+});
 
+//autofire on
 document.body.addEventListener("mousedown", function (e) {
     var mouseX = e.clientX;
     var mouseY = e.clientY;
@@ -397,15 +395,20 @@ document.body.addEventListener("mousedown", function (e) {
       if(time<=0||score<0){
       } else{bShot++;}
     }, 150);
-}); //autofire on
+});
 
+//autofire off
 document.body.addEventListener("mouseup", function (e) {
     autofire = 0;
     clearInterval(intervalId);
-}); //autofire off
+});
+
+//move
 document.body.addEventListener("keydown", function (e) {
   key[e.keyCode] = true;
-}); //move
+});
+
+//stop moving
 document.body.addEventListener("keyup", function (e) {
   key[e.keyCode] = false;
-}); //stop moving
+});
