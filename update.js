@@ -25,7 +25,7 @@ var c = document.getElementById('c'),
     tSwitch = 1,
     lSwitch = 1,
     autofire = 0,
-    intervalId;
+    firerate;
 
 function Bullets(){
 
@@ -289,17 +289,17 @@ function Zombies(){
 
   for (var i=0; i < z.length; i++){
 
-    z[i][2] -= vx;
+    z[i][2] -= vx; //don't combine velocity with the randomness
     z[i][3] -= vy;
-    z[i][2] -= (Random(0, z[i][2]) - Random(0, z[i][0])) * .03 + Random(-3,3);
-    z[i][3] -= (Random(0, z[i][3]) - Random(0, z[i][1])) * .03 + Random(-3,3);
+    z[i][2] -= (Random(0, z[i][2]) - Random(0, z[i][0])) * .03;
+    z[i][3] -= (Random(0, z[i][3]) - Random(0, z[i][1])) * .03;
     z[i][4] --;
 
 //if zombie bites you, you lose points and they die
-      if(z[i][2] < px + 10 && z[i][2] > px - 10 && z[i][3] > py - 10 && z[i][3] < py + 10){
-        score -= 500;
-        z.splice(i, 1);
-      }
+    if(z[i][2] < px + 10 && z[i][2] > px - 10 && z[i][3] > py - 10 && z[i][3] < py + 10){
+      score -= 500;
+      z.splice(i, 1);
+    }
 
     ctx.fillStyle = "green";
     ctx.beginPath();
@@ -314,18 +314,17 @@ function Zombies(){
           ze = b[j][1] < z[i][3] && b[j][1] > z[i][3] - 10,
           zf = b[j][1] === z[i][3];
 
-      if(za && zd || //tl
-         za && zf || //cl
-         za && ze || //bl
-         zc && zd || //tc
-         zc && ze || //bc
-         zb && zd || //tr
-         zb && zf || //cr
-         zb && ze ){ //br
+      if(za && zd || //topLeft
+         za && zf || //centerLeft
+         za && ze || //bottomLeft
+         zc && zd || //topCenter
+         zc && ze || //bottomCenter
+         zb && zd || //topRight
+         zb && zf || //centerRight
+         zb && ze ){ //bottomrRight
            if(time<=0||score<0){
            } else{
           z.splice(i, 1);
-          z.push([px, py, Random(-cw*3, cw*3), Random(-ch*3, ch*3)]);
           b.splice(j, 1);
           score += 10;
           zKill++;
@@ -345,9 +344,8 @@ var tickTock = setInterval(function() {
 
 //zombie spawner
 setInterval(function() {
-  z.shift(); //clears oldest one out
   z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
-}, 5000);
+}, 1000);
 
 //load screen then loads game
 if(lSwitch == 1){
@@ -390,7 +388,7 @@ document.body.addEventListener("mousedown", function (e) {
       }
     });
 
-    intervalId = setInterval( function(){
+    firerate = setInterval( function(){
       b.push([px, py, mouseX, mouseY, px, py]);
       if(time<=0||score<0){
       } else{bShot++;}
@@ -400,7 +398,7 @@ document.body.addEventListener("mousedown", function (e) {
 //autofire off
 document.body.addEventListener("mouseup", function (e) {
     autofire = 0;
-    clearInterval(intervalId);
+    clearInterval(firerate);
 });
 
 //move
