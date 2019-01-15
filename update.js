@@ -119,6 +119,8 @@ var coor =
 
 function mainMenu(){
 
+  var pageWidth,boxXPos,boxYPos,boxWidth;
+
   requestAnimationFrame(mainMenu);
 
 /* background */
@@ -134,32 +136,42 @@ function mainMenu(){
 
 /* responsive play button */
   ctx.beginPath();
-  for(var i=400, j=.4, k=.5, l=80, m=.43, n=350;
+
+
+  for(var i=400, j=.4, k=.5, l=80, m=30, n=30, o=70;
       i<2000;
-      i++, j+=.00006, k+=.0002, l+=.05, m+=.000055, n+=.124){
+      i++, j+=.00006, k+=.0002, l+=.05, m+=.01, n+=.03, o-=.015){
     if(cw==i){
         ctx.fillStyle = "black";
         ctx.rect(i*j, ch*k, l, 50);
         ctx.fill();
         ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.fillText("Play", i*m, n);
+        ctx.font = m + "px Arial";
+        ctx.fillText("Play", (i+n)*j, (ch+o)*k);
+        pageWidth=i;
+        boxXPos=j;
+        boxYPos=k;
+        boxWidth=l;
     }
   }
 
-/* click play button on mainMenu screen */
-  document.body.addEventListener("click", function (e) {
-    if(lSwitch == 1){
-      if(e.clientX > (px - 70) && e.clientX < (px + 30) && e.clientY > (py + 100) && e.clientY < (py + 150)){
-        lSwitch = 0;
-        document.body.style.backgroundColor = "#d1ecfd";
-        Update();
-        /* reset variables after map loads*/
-        z = [];
-        time = 60;
-        score = 0;
-      }
-  }});
+  /* click play button on mainMenu screen */
+    document.body.addEventListener("click", function (e) {
+      if(lSwitch == 1){
+        if(e.clientX > (pageWidth*boxXPos)        &&
+           e.clientX < ((pageWidth*boxXPos) + boxWidth) &&
+           e.clientY > (ch*boxYPos)        &&
+           e.clientY < ((ch*boxYPos) + 50) ){
+          lSwitch = 0;
+          document.body.style.backgroundColor = "#d1ecfd";
+          Update();
+          /* reset variables after map loads*/
+          //<link rel="preload" href="v3_noOcean-min.png" as="image">
+          z = [];
+          time = 60;
+          score = 0;
+        }
+    }});
 }
 
 function Movement(){
