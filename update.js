@@ -1,12 +1,10 @@
-//var noGlobalVariables = (function(){
-
 var c = document.getElementById('c'),
     cw = c.width = window.innerWidth,
     ch = c.height = window.innerHeight,
     ctx = c.getContext("2d"),
     cf = ctx.font = "30px Arial",
     bg = new Image(),
-    bgs = bg.src = "V3_noOcean-min.png",
+    bgs = bg.src = "v3_noOcean-min.png",
     x = Random(0, 14852),
     y = Random(0, 6378),
     px = cw/2,
@@ -35,8 +33,8 @@ function Bullets(){
 
     var left = b[i][4] > b[i][2] && b[i][0] < b[i][2],
         right = b[i][4] < b[i][2] && b[i][0] > b[i][2],
-        xCenter = b[i][4] === 0,
-        yCenter = b[i][5] === 0,
+        xCenter = b[i][4] === b[i][2] === 0,
+        yCenter = b[i][5] === b[i][3] === 0,
         top = b[i][5] > b[i][3] && b[i][1] < b[i][3],
         bottom = b[i][5] < b[i][3] && b[i][1] > b[i][3];
 
@@ -93,15 +91,18 @@ var coor =
 
   /*  update city names */
   ctx.fill();
-  ctx.font = .025 * window.innerWidth + "px Arial";
+  ctx.font = .028 * window.innerWidth + "px Arial";
   ctx.fillStyle = "black";
 
+  ctx.fillText(coor[city][1], 20, 40);
   /* nauru (200) has no capital city, so this skips the capital section for nauru */
+  /*
   if(city === 200){
     ctx.fillText(coor[city][1], 20, 40);
   } else if(city > 200 || city < 200){
     ctx.fillText(coor[city][0].concat(", ").concat(coor[city][1]), 20, 40);
   }
+  */
 
 /* update stats when player reaches city */
   if(x < coor[city][2] + 10){
@@ -166,7 +167,6 @@ function mainMenu(){
           document.body.style.backgroundColor = "#d1ecfd";
           Update();
           /* reset variables after map loads*/
-          //<link rel="preload" href="v3_noOcean-min.png" as="image">
           z = [];
           time = 60;
           score = 0;
@@ -250,25 +250,36 @@ function timeAndScore(){
       tSwitch = 0;
       time = 0;
       ctx.fillStyle = "red";
-      ctx.font = "80px Arial";
-      ctx.fillText("Game Over", px - 210, py - 120);
+      ctx.font = "70px Gadget";
+      ctx.fillText("Game Over", px - 180, py - 120);
       ctx.fillStyle = "black";
-      ctx.font = "30px Arial";
 
-      ctx.fillText("Final Score: " + final, px-86, py + 60);
-      if((finalTime%60)<10){
-        ctx.fillText("Total Time: " + Math.floor(finalTime/60) + ":" + "0" + finalTime % 60, px-86 , py + 100);
+      ctx.font = "28px Arial";
+      ctx.fillText("  Final Score", px-200, py + 60);
+      ctx.fillText("   Total Time", px-200 , py + 120);
+      ctx.fillText("Zombies Killed", px-200, py + 180);
+      ctx.fillText(" Bullets Shot", px + 10, py + 60);
+      ctx.fillText(" Cities Found", px + 10, py + 120);
+      ctx.fillText("    Accuracy", px + 10, py + 180);
+
+      ctx.font = "25px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(final, px - 120, py + 90);
+      if((finalTime % 60) < 10){
+        ctx.fillText(Math.floor(finalTime / 60) + ":" + "0" + finalTime % 60, px - 120 , py + 150);
       } else {
-        ctx.fillText("Total Time: " + Math.floor(finalTime/60) + ":" + finalTime % 60, px-86 , py + 100);
+        ctx.fillText(Math.floor(finalTime / 60) + ":" + finalTime % 60, px - 120 , py + 150);
       }
-      ctx.fillText("Zombies Killed: " + zKill, px-86, py + 140);
-      ctx.fillText("Bullets Shot: " + Math.floor(bShot), px-86, py + 180);
-      ctx.fillText("Accuracy: " + Math.floor(zKill/bShot*100) + "%", px-86, py + 220);
-      ctx.fillText("Cities Found: " + cFound, px-86, py + 260);
+      ctx.fillText(zKill, px - 120, py + 210);
+      ctx.fillText(Math.floor(bShot), px + 90, py + 90);
+      ctx.fillText(cFound, px + 90, py + 150);
+      ctx.fillText(Math.floor(zKill/bShot*100) + "%", px + 100, py + 210);
+
+      ctx.textAlign = "left";
       ctx.fillStyle = "gray";
       ctx.fillRect(px - 75, py - 75, 150, 40);
       ctx.fillStyle = "white";
-      ctx.fillText("Play Again", px - 72, py - 45);
+      ctx.fillText("Play Again", px - 60, py - 47);
     }
 
     gameOver();
@@ -293,7 +304,7 @@ function timeAndScore(){
     });
   } else {
     finalScore = score;
-    ctx.font = .025 * window.innerWidth + "px Arial";
+    ctx.font = .028 * window.innerWidth + "px Arial";
     ctx.fillText("Time: " + time, cw*.43, 40);
     ctx.fillText("Hit Points: " + score, cw*.8, 40);
   }
@@ -447,5 +458,3 @@ document.body.addEventListener("keydown", function (e) {
 document.body.addEventListener("keyup", function (e) {
   key[e.keyCode] = false;
 });
-
-//})();
