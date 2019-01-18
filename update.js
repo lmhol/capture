@@ -118,6 +118,13 @@ var coor =
   }}}}};
 }
 
+function clockCountdown(){
+  if(tSwitch==1){
+    time--;
+    finalTime++;
+  } else{}
+}
+
 function mainMenu(){
 
   var pageWidth,boxXPos,boxYPos,boxWidth;
@@ -391,23 +398,24 @@ function Zombies(){
   }
 }
 
-/* clock countdown */
-setInterval(function() {
-  if(tSwitch==1){
-    time--;
-    finalTime++;
-  } else{}
-}, 1000);
-/* zombie spawner */
-setInterval(function() {
+function zombieSpawner(){
   z.push([px, py, Random(-cw * 3, cw * 3), Random(-cw * 3, cw * 3)]);
-}, 1000);
-/* mainMenu screen then loads game */
-if(lSwitch == 1){
-  mainMenu();
-} else {
-  Update();
 }
+
+setInterval(function(){
+  clockCountdown();
+  zombieSpawner();
+}, 1000);
+
+function Loader(){
+  if(lSwitch == 1){
+    mainMenu();
+  } else {
+    Update();
+  }
+}
+
+Loader();
 
 /* stops rightclick */
 window.oncontextmenu = function (){
