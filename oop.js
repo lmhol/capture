@@ -4,57 +4,63 @@ function initCanvas() {
       ch = ctx.canvas.height = window.innerHeight,
       animateInterval = setInterval(Animate, 30),
       zombieSpawner = setInterval(Spawner, 1000),
-      px = cw/2,
-      py = ch/2,
-      zombies = [];
+      z = [];
 
   function Animate(){
     ctx.save();
     ctx.clearRect(0, 0, cw, ch);
     //Draw here
-    for(let i=0; i<zombies.length;i++){
-      zombies[i].render(ctx, zombies[i].x, zombies[i].y, px, py);
-      zombies[i].x -= (Random(0, zombies[i].x) - Random(0, px)) * .01;
-      zombies[i].y -= (Random(0, zombies[i].y) - Random(0, py)) * .01;
-    }
-    Player(ctx);
+    Player(ctx, cw, ch);
+    drawZombies();
+
     ctx.restore();
   }
 
-  function Player(){
-    this.color = "black";
-    this.x = px;
-    this.y = py;
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, 10, 0, Math.PI * 2);
-    ctx.fill();
+  function drawZombies(){
+
+    for(let i=0; i<z.length;i++){
+      z[i].render(ctx, cw, ch);
+    }
+
   }
 
   function Spawner(){
-    zombies.push(new Zombie());
-  }
-
-  function Zombie(){
-    this.x = Random(-cw * 3, cw * 3),
-    this.y = Random(-ch * 3, ch * 3),
-    this.radius = 5,
-    this.sAngle = 0,
-    this.eAngle = Math.PI * 2,
-    this.color = "green";
-
-    this.render = function(ctx, zx, zy, px, py){
-      ctx.fillStyle = this.color;
-      ctx.beginPath();
-      ctx.arc(zx, zy, this.radius, this.sAngle, this.eAngle);
-      ctx.fill();
-    }
+    z.push(new Zombie(ctx, cw, ch));
   }
 
 }
 
+function Player(ctx, cw, ch){
+  this.color = "black";
+  this.x = cw/2;
+  this.y = ch/2;
+  ctx.fillStyle = this.color;
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, 10, 0, Math.PI * 2);
+  ctx.fill();
+}
+
 function Random(min, max){
   return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+function Zombie(ctx, cw, ch){
+  this.x = Random(-cw/2 * 6, cw/2 * 6),
+  this.y = Random(-ch/2 * 6, ch/2 * 6),
+  this.radius = 5,
+  this.sAngle = 0,
+  this.eAngle = Math.PI * 2,
+  this.color = "green";
+
+  this.render = function(){
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, this.sAngle, this.eAngle);
+    ctx.fill();
+
+    this.x -= (Random(0, this.x) - Random(0, cw/2)) * .01;
+    this.y -= (Random(0, this.y) - Random(0, ch/2)) * .01;
+  }
 }
 
 window.addEventListener('load', function(event){
