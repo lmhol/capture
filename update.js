@@ -1,8 +1,9 @@
 function initCanvas() {
 
-let cw = document.getElementById('c').width = window.innerWidth,
-    ch = document.getElementById('c').height = window.innerHeight,
-    ctx = document.getElementById('c').getContext("2d"),
+let c = document.getElementById('c'),
+    cw = c.width = window.innerWidth,
+    ch = c.height = window.innerHeight,
+    ctx = c.getContext("2d"),
     bg = new Image(),
     bgs = bg.src = "v3_noOcean-min.png",
     x = Random(0, 14852),
@@ -47,6 +48,7 @@ function Bullets(){
     ctx.beginPath();
     ctx.arc(b[i][0], b[i][1], 2, 0, Math.PI * 2);
     ctx.fill();
+    ctx.closePath();
 
 /* splice bullet if it arrives at destination */
     if(top    && left    ||
@@ -103,7 +105,7 @@ let coor =
     ctx.fillText(coor[city][0].concat(", ").concat(coor[city][1]), 20, 40);
   }
   */
-
+  ctx.closePath();
 /* update stats when player reaches city */
   if(x < coor[city][2] + 10){
     if(x > coor[city][2] - 10){
@@ -172,6 +174,7 @@ function mainMenu(){
         boxWidth=l;
     }
   }
+  ctx.closePath();
 
   /* click play button on mainMenu screen */
     document.body.addEventListener("click", function (e) {
@@ -326,6 +329,7 @@ function timeAndScore(){
     ctx.fillText("Hit Points: " + score, cw*.8, 40);
   }
   ctx.fill();
+  ctx.closePath();
 }
 
 function Update() {
@@ -348,6 +352,7 @@ function Update() {
 
     City();
     timeAndScore();
+    ctx.closePath();
 }
 
 function Zombies(){
@@ -377,6 +382,7 @@ function Zombies(){
     ctx.beginPath();
     ctx.arc(z[i][2], z[i][3], 5, 0, Math.PI * 2);
     ctx.fill();
+    ctx.closePath();
 
 /* bullet collision*/
 
