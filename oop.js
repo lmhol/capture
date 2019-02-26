@@ -6,11 +6,11 @@ var pos = {
   key:[]
 }
 
-function Draw(){
+function draw(){
   let map = new Map();
   let player = new Player(map.ctx, map.cw, map.ch);
       
-  requestAnimationFrame(Draw);
+  requestAnimationFrame(draw);
   map.update();
   map.draw();
   player.draw();
@@ -21,12 +21,36 @@ function Map(){
   this.cw = this.ctx.canvas.width  = window.innerWidth;
   this.ch = this.ctx.canvas.height = window.innerHeight;
   this.bg = new Image();
-  this.bg.src = "v4.png";
+  this.bg.src = "v5.png";
   this.speed = 10;
   this.friction = .8;
   
-  this.update = function(){
-
+  this.update = function(e){
+    if(pos.key[87] || pos.key[38]){
+      if(pos.vy > -this.speed) {
+        pos.vy--;
+      }
+    }
+    if(pos.key[83] || pos.key[40]){
+      if(pos.vy < this.speed) {
+        pos.vy++;
+      }
+    }
+    if(pos.key[68] || pos.key[39]){
+      if(pos.vx < this.speed) {
+        pos.vx++;
+      }
+    }
+    if(pos.key[65] || pos.key[37]){
+      if(pos.vx > -this.speed) {
+        pos.vx--;
+      }
+    }
+    
+    Math.floor(pos.vy *= this.friction);
+    Math.floor(pos.y += pos.vy);
+    Math.floor(pos.vx *= this.friction);
+    Math.floor(pos.x += pos.vx);
   }
   
   this.draw = function(){
@@ -55,6 +79,12 @@ function random(min, max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-window.addEventListener('load', function(event){
-  Draw();
+window.addEventListener("keydown", function (e) {
+  pos.key[e.keyCode] = true;
 });
+
+window.addEventListener("keyup", function (e) {
+  pos.key[e.keyCode] = false;
+});
+
+window.addEventListener('load', draw);
